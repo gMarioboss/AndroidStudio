@@ -22,7 +22,15 @@
     <select />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="da2d6495-1a0c-450a-a637-c20199cc5d0b" name="Default Changelist" comment="" />
+    <list default="true" id="da2d6495-1a0c-450a-a637-c20199cc5d0b" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/../Lesson_2/Calculator/app/src/main/res/layout/activity_main_buttons.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/../Lesson_2/Calculator/app/src/main/res/layout/activity_main_texts.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lesson_2/Calculator/app/src/main/res/layout/activity_main.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lesson_2/Calculator/app/src/main/res/layout/activity_main.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lesson_2/Calculator/app/src/main/res/values/colors.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lesson_2/Calculator/app/src/main/res/values/colors.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lesson_2/Calculator/app/src/main/res/values/strings.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lesson_2/Calculator/app/src/main/res/values/strings.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Lesson_2/Calculator/app/src/main/res/values/themes.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Lesson_2/Calculator/app/src/main/res/values/themes.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -65,9 +73,9 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="WindowStateProjectService">
-    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1622556572110">
+    <state x="740" y="275" key="FileChooserDialogImpl" timestamp="1622637990926">
       <screen x="0" y="0" width="1920" height="1040" />
     </state>
-    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1920.-82.1920.1040@0.0.1920.1040" timestamp="1622556572110" />
+    <state x="740" y="275" key="FileChooserDialogImpl/0.0.1920.1040/-1920.-82.1920.1040@0.0.1920.1040" timestamp="1622637990926" />
   </component>
 </project>
