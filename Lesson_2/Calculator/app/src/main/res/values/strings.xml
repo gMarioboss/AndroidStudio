@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Calculator</string>
-    <string name="history">85</string>
-    <string name="actual_operation">1,234</string>
+    <string name="history">0</string>
+    <string name="actual_operation">0</string>
     <string name="_1">1</string>
     <string name="_2">2</string>
     <string name="_3">3</string>
