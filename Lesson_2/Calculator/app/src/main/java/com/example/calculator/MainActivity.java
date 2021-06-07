@@ -9,6 +9,8 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private static final String DATA_TEXT = "Data Texts";
+    private static final String OPERATIONS = "Operations";
+    private static final Double ZERO = 0.0;
 
     private Data data = new Data();
     private Operations operation = new Operations(data);
@@ -20,18 +22,20 @@ public class MainActivity extends AppCompatActivity {
     protected void onSaveInstanceState(Bundle instanceState) {
         super.onSaveInstanceState(instanceState);
         instanceState.putParcelable(DATA_TEXT, data);
+        instanceState.putParcelable(OPERATIONS, operation);
     }
 
     @Override
     protected void onRestoreInstanceState(Bundle instanceState) {
         super.onRestoreInstanceState(instanceState);
         data = instanceState.getParcelable(DATA_TEXT);
+        operation = instanceState.getParcelable(OPERATIONS);
         setRestoredTexts();
     }
 
     private void setRestoredTexts() {
-        setHistory(data.getHistoryText().toString());
-        setScreen(data.getResult().toString());
+        setTextOnHistory(data.getHistoryText().toString());
+        setTextOnScreen(data.getResult().toString());
     }
 
     @Override
@@ -49,154 +53,153 @@ public class MainActivity extends AppCompatActivity {
 
     private void initButtons() {
         findViewById(R.id.button_0).setOnClickListener(v -> {
-            addToOperand("0");
-            makeHistory("0");
+            sendAndShowData(Values.NUMBER_0.getValue());
         });
         findViewById(R.id.button_1).setOnClickListener(v -> {
-            addToOperand("1");
-            makeHistory("1");
+            sendAndShowData(Values.NUMBER_1.getValue());
         });
         findViewById(R.id.button_2).setOnClickListener(v -> {
-            addToOperand("2");
-            makeHistory("2");
+            sendAndShowData(Values.NUMBER_2.getValue());
         });
         findViewById(R.id.button_3).setOnClickListener(v -> {
-            addToOperand("3");
-            makeHistory("3");
+            sendAndShowData(Values.NUMBER_3.getValue());
         });
         findViewById(R.id.button_4).setOnClickListener(v -> {
-            addToOperand("4");
-            makeHistory("4");
+            sendAndShowData(Values.NUMBER_4.getValue());
         });
         findViewById(R.id.button_5).setOnClickListener(v -> {
-            addToOperand("5");
-            makeHistory("5");
+            sendAndShowData(Values.NUMBER_5.getValue());
         });
         findViewById(R.id.button_6).setOnClickListener(v -> {
-            addToOperand("6");
-            makeHistory("6");
+            sendAndShowData(Values.NUMBER_6.getValue());
         });
         findViewById(R.id.button_7).setOnClickListener(v -> {
-            addToOperand("7");
-            makeHistory("7");
+            sendAndShowData(Values.NUMBER_7.getValue());
         });
         findViewById(R.id.button_8).setOnClickListener(v -> {
-            addToOperand("8");
-            makeHistory("8");
+            sendAndShowData(Values.NUMBER_8.getValue());
         });
         findViewById(R.id.button_9).setOnClickListener(v -> {
-            addToOperand("9");
-            makeHistory("9");
+            sendAndShowData(Values.NUMBER_9.getValue());
         });
         findViewById(R.id.button_point).setOnClickListener(v -> {
-            addToOperand(".");
-            makeHistory(".");
+            sendAndShowData(Values.POINT.getValue());
         });
         findViewById(R.id.button_plus).setOnClickListener(v -> {
-            result();
-            data.setOperationType('+');
-            makeHistory("+");
+            setOperation(Values.OPER_PLUS.getValue());
         });
         findViewById(R.id.button_minus).setOnClickListener(v -> {
-            result();
-            data.setOperationType('-');
-            makeHistory("-");
+            setOperation(Values.OPER_MINUS.getValue());
         });
         findViewById(R.id.button_division).setOnClickListener(v -> {
-            result();
-            data.setOperationType('/');
-            makeHistory("/");
+            setOperation(Values.OPER_DIV.getValue());
         });
         findViewById(R.id.button_X).setOnClickListener(v -> {
-            result();
-            data.setOperationType('*');
-            makeHistory("*");
+            setOperation(Values.OPER_MULT.getValue());
         });
         findViewById(R.id.button_plus_minus).setOnClickListener(v -> {
-            result();
-            data.setOperationType('p');
+            setOperation(Values.OPER_PLUS.getValue());
         });
         findViewById(R.id.button_percent).setOnClickListener(v -> {
-            result();
-            data.setOperationType('%');
-            makeHistory("%");
+            setOperation(Values.OPER_PERCENT.getValue());
         });
         findViewById(R.id.button_equally).setOnClickListener(v -> {
-            result();
-            data.setOperationType('=');
-            makeHistory("=");
+            setOperation(Values.OPER_EQ.getValue());
         });
         findViewById(R.id.button_c).setOnClickListener(v -> {
             clearEverything();
         });
     }
 
-    private void result() {
+    private void sendAndShowData(String value) {
+        data.setScreenText(value);
+        data.setHistoryText(value);
+        setTextOnScreen(data.getScreenText().toString());
+        setTextOnHistory(data.getHistoryText().toString());
+    }
+
+    private void setOperation(String value) {
+        data.setHistoryText(value);
+        setTextOnHistory(data.getHistoryText().toString());
+
         try {
-            if (data.isOperationFirst()) {
-                data.setResult(Double.parseDouble(data.getScreenText().toString()));
-            } else {
-                data.setOperand(Double.parseDouble(data.getScreenText().toString()));
-            }
+            data.setOperand(Double.parseDouble(data.getScreenText().toString()));
         } catch (NumberFormatException e) {
-            setScreen(data.getScreenText().toString());
+            setTextOnScreen(data.getResult().toString());
         }
-        switch (data.getOperationType()) {
-            case '+':
-                operation.sum();
-                setScreen(data.getResult().toString());
-                break;
-            case '-':
-                operation.subtraction();
-                setScreen(data.getResult().toString());
-                break;
-            case '*':
-                operation.multiplication();
-                setScreen(data.getResult().toString());
-                break;
-            case '/':
-                operation.division();
-                setScreen(data.getResult().toString());
-                break;
-            case 'p':
-            case '%':
-                clearEverything();
-                break;
-            case '=':
-                setScreen(data.getResult().toString());
-                data.deleteHistoryText();
-                makeHistory(data.getResult().toString());
+
+        if (value.equals("%%")) {
+            result(value);
+            data.setOperand(data.getResult());
+        } else if (data.isOperationFirst()) {
+            data.setResult(data.getOperand());
+            data.setOperand(ZERO);
+            data.setOperationFirst(false);
+            data.setOperationType(value);
+        } else {
+            result(value);
         }
-        data.setOperationFirst(false);
         data.deleteScreenText();
-        data.setOperand(0.0);
     }
 
-    private void addToOperand(String digit) {
-        data.setScreenText(digit);
-        setScreen(data.getScreenText().toString());
+    private void result(String operationType) {
+        switch (data.getOperationType()) {
+            case "-":
+                operation.subtraction();
+                historyLogic(operationType);
+                break;
+            case "+":
+                operation.sum();
+                historyLogic(operationType);
+                break;
+            case "*":
+                operation.multiplication();
+                historyLogic(operationType);
+                break;
+            case "/":
+                operation.division();
+                historyLogic(operationType);
+                break;
+            case "%%":
+                operation.percent();
+                historyLogic(operationType);
+                break;
+            case "=":
+                historyLogic(operationType);
+                break;
+            default:
+                break;
+        }
     }
 
-    private void makeHistory(String str) {
-        data.setHistoryText(str);
-        setHistory(data.getHistoryText().toString());
+    private void historyLogic(String operationType) {
+        setTextOnScreen(data.getResult().toString());
+        data.setOperationType(operationType);
+
+        if (operationType.equals("=") || operationType.equals("%%")) {
+            data.deleteHistoryText();
+            data.setHistoryText(data.getResult().toString());
+        } else {
+            setTextOnHistory(data.getHistoryText().toString());
+        }
     }
 
-    private void setHistory(String text) {
-        history.setText(String.format(Locale.ENGLISH, text));
-    }
-
-    private void setScreen(String text) {
+    private void setTextOnScreen(String text) {
         screen.setText(String.format(Locale.ENGLISH, text));
     }
 
+    private void setTextOnHistory(String text) {
+        history.setText(String.format(Locale.ENGLISH, text));
+    }
+
     private void clearEverything() {
-        data.setOperationFirst(true);
-        setScreen("0");
-        setHistory("0");
         data.deleteHistoryText();
         data.deleteScreenText();
-        data.setOperationType('0');
-        data.setResult(0.0);
+        data.setOperand(ZERO);
+        data.setResult(ZERO);
+        setTextOnScreen(ZERO.toString());
+        setTextOnHistory(ZERO.toString());
+        data.setOperationFirst(true);
     }
+
 }

@@ -3,12 +3,13 @@ package com.example.calculator;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-public class Data implements Parcelable {
+public class Data implements Parcelable{
    private StringBuilder screenText = new StringBuilder();
    private StringBuilder historyText = new StringBuilder();
-    private char operationType;
+    private String operationType = "%%";
 
     private boolean isOperationFirst = true;
+
     private Double operand = 0.0;
     private Double result = 0.0;
 
@@ -16,7 +17,7 @@ public class Data implements Parcelable {
     }
 
     protected Data(Parcel in) {
-        operationType = (char) in.readInt();
+        operationType = in.readString();
         isOperationFirst = in.readByte() != 0;
         if (in.readByte() == 0) {
             operand = null;
@@ -32,7 +33,7 @@ public class Data implements Parcelable {
 
     @Override
     public void writeToParcel(Parcel dest, int flags) {
-        dest.writeInt((int) operationType);
+        dest.writeString(operationType);
         dest.writeByte((byte) (isOperationFirst ? 1 : 0));
         if (operand == null) {
             dest.writeByte((byte) 0);
@@ -105,11 +106,11 @@ public class Data implements Parcelable {
         this.screenText = screenText.delete(0, screenText.length());
     }
 
-    public char getOperationType() {
+    public String getOperationType() {
         return operationType;
     }
 
-    public void setOperationType(char operationType) {
+    public void setOperationType(String operationType) {
         this.operationType = operationType;
     }
 
@@ -120,5 +121,4 @@ public class Data implements Parcelable {
     public void setOperationFirst(boolean operationFirst) {
         isOperationFirst = operationFirst;
     }
-
 }
