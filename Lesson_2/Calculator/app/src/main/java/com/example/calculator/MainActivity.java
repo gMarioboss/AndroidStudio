@@ -2,12 +2,18 @@ package com.example.calculator;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.CompoundButton;
+import android.widget.Switch;
 import android.widget.TextView;
+
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
     private static final String DATA_TEXT = "Data Texts";
     private static final String OPERATIONS = "Operations";
     private static final Double ZERO = 0.0;
@@ -44,8 +50,20 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initViews();
         initButtons();
+        initThemeChooser();
     }
 
+    private void initThemeChooser() {
+        initSwitchControl(findViewById(R.id.switch1),
+                MaterialButtonsDarkMode);
+    }
+
+    private void initSwitchControl(SwitchMaterial control, final int codeStyle){
+        control.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            setAppTheme(codeStyle);
+            recreate();
+        });
+    }
     private void initViews() {
         screen = findViewById(R.id.actual_operation);
         history = findViewById(R.id.history);

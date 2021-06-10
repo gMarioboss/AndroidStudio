@@ -4,22 +4,38 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@drawable/sky_stars"
     android:alpha="0.80"
     tools:context=".MainActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="@dimen/height_linearlayout"
+        android:layout_weight="0.1">
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/switch1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="@string/dark_mode"
+            android:gravity="end|center"
+            android:theme="@style/FilterSwitchThemeGreen"
+            />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/height_linearlayout"
         android:layout_weight="1"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:background="@drawable/sky_stars">
 
         <TextView
             android:id="@+id/history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/history"
-            android:textSize="35sp"
+            android:textSize="@dimen/history_text_size"
             android:textColor="@color/gray_button"
             android:gravity="end"
             />
@@ -31,13 +47,13 @@
             android:textColor="@color/gray_button"
             android:gravity="bottom|end"
             android:text="@string/actual_operation"
-            android:textSize="50sp" />
+            android:textSize="@dimen/screen_text_size" />
     </LinearLayout>
 
     <include
         android:layout_weight="1.8"
         layout="@layout/activity_main_buttons"
         android:layout_width="match_parent"
-        android:layout_height="0dp" />
+        android:layout_height="@dimen/height_linearlayout" />
 
 </androidx.appcompat.widget.LinearLayoutCompat>
