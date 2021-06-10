@@ -13,13 +13,13 @@
         android:layout_weight="0.1">
 
         <com.google.android.material.switchmaterial.SwitchMaterial
-            android:id="@+id/switch1"
+            android:id="@+id/switch_change_theme"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/dark_mode"
             android:gravity="end|center"
-            android:theme="@style/FilterSwitchThemeGreen"
+
             />
     </LinearLayout>
 

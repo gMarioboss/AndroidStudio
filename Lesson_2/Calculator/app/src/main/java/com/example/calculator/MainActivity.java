@@ -4,16 +4,13 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.view.View;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Locale;
 
-public class MainActivity extends BaseActivity {
+public class MainActivity extends AppCompatActivity {
     private static final String DATA_TEXT = "Data Texts";
     private static final String OPERATIONS = "Operations";
     private static final Double ZERO = 0.0;
@@ -23,6 +20,51 @@ public class MainActivity extends BaseActivity {
 
     private TextView screen;
     private TextView history;
+
+    private static final String NameSharedPreference = "LOGIN";
+
+    protected SharedPreferences sharedPreferences;
+    protected SwitchMaterial switchMaterial;
+    public static final String KEY_DARK_MODE = "Dark Mode";
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setAppTheme();
+        setContentView(R.layout.activity_main);
+        initViews();
+        initButtons();
+        initThemeChooser();
+    }
+
+    private void initThemeChooser() {
+        switchMaterial = findViewById(R.id.switch_change_theme);
+
+        putActiveState();
+
+        switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            saveNightMode(isChecked);
+            recreate();
+        });
+    }
+
+    private void putActiveState() {
+        switchMaterial.setChecked(sharedPreferences.getBoolean(KEY_DARK_MODE, false));
+    }
+
+    private void saveNightMode(boolean darkMode) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putBoolean(KEY_DARK_MODE, darkMode).apply();
+    }
+
+    public void setAppTheme() {
+        sharedPreferences = getSharedPreferences(NameSharedPreference, MODE_PRIVATE);
+        if (sharedPreferences.getBoolean(KEY_DARK_MODE, false)) {
+            setTheme(R.style.Buttons_DarkMode);
+        } else {
+            setTheme(R.style.Theme_Calculator);
+        }
+    }
 
     @Override
     protected void onSaveInstanceState(Bundle instanceState) {
@@ -44,26 +86,6 @@ public class MainActivity extends BaseActivity {
         setTextOnScreen(data.getResult().toString());
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
-        initViews();
-        initButtons();
-        initThemeChooser();
-    }
-
-    private void initThemeChooser() {
-        initSwitchControl(findViewById(R.id.switch1),
-                MaterialButtonsDarkMode);
-    }
-
-    private void initSwitchControl(SwitchMaterial control, final int codeStyle){
-        control.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            setAppTheme(codeStyle);
-            recreate();
-        });
-    }
     private void initViews() {
         screen = findViewById(R.id.actual_operation);
         history = findViewById(R.id.history);
