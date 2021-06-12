@@ -1,18 +1,19 @@
 package com.example.calculator;
 
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.widget.ImageButton;
 import android.widget.TextView;
-
-import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import java.util.Locale;
 
-public class MainActivity extends AppCompatActivity {
-    private static final String DATA_TEXT = "Data Texts";
-    private static final String OPERATIONS = "Operations";
+public class MainActivity extends AppCompatActivity implements Constants {
     private static final Double ZERO = 0.0;
 
     private Data data = new Data();
@@ -21,11 +22,8 @@ public class MainActivity extends AppCompatActivity {
     private TextView screen;
     private TextView history;
 
-    private static final String NameSharedPreference = "LOGIN";
-
+    protected boolean isDarkModeEnabled;
     protected SharedPreferences sharedPreferences;
-    protected SwitchMaterial switchMaterial;
-    public static final String KEY_DARK_MODE = "Dark Mode";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,22 +32,32 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         initViews();
         initButtons();
-        initThemeChooser();
+        getThemeInfoFromIntent();
     }
 
-    private void initThemeChooser() {
-        switchMaterial = findViewById(R.id.switch_change_theme);
+    private void getThemeInfoFromIntent() {
+        ImageButton settingsButton = findViewById(R.id.settings_button);
 
-        putActiveState();
+        ActivityResultLauncher<Intent> activityResultLauncher = registerForActivityResult(
+                new ActivityResultContracts.StartActivityForResult(),
+                result -> {
+                    if (result.getResultCode() == Activity.RESULT_OK) {
+                        Intent data = result.getData();
+                        assert data != null;
+                        isDarkModeEnabled = data.getBooleanExtra(CHOOSE_THEME, false);
+                        initThemeChooser(isDarkModeEnabled);
+                    }
+                });
 
-        switchMaterial.setOnCheckedChangeListener((buttonView, isChecked) -> {
-            saveNightMode(isChecked);
-            recreate();
+        settingsButton.setOnClickListener(v -> {
+            Intent runSettings = new Intent(this, SettingsActivity.class);
+            activityResultLauncher.launch(runSettings);
         });
     }
 
-    private void putActiveState() {
-        switchMaterial.setChecked(sharedPreferences.getBoolean(KEY_DARK_MODE, false));
+    private void initThemeChooser(boolean isDarkModeEnabled) {
+        saveNightMode(isDarkModeEnabled);
+        recreate();
     }
 
     private void saveNightMode(boolean darkMode) {
