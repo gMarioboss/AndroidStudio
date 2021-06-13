@@ -5,4 +5,5 @@
     <dimen name="history_text_size">35sp</dimen>
     <dimen name="screen_text_size">50sp</dimen>
     <dimen name="width_buttons">0dp</dimen>
+    <dimen name="settings_button">27dp</dimen>
 </resources>
