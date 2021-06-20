@@ -2,6 +2,7 @@ package com.example.notes;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 public class MainActivity extends AppCompatActivity {
