@@ -1,8 +1,10 @@
 package com.example.notes;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -18,9 +20,7 @@ import android.widget.TextView;
 
 import org.jetbrains.annotations.NotNull;
 
-public class NoteFragment extends Fragment {
-
-    private static final String NOTE_INFO = "Note Info";
+public class NoteFragment extends Fragment implements Constants {
 
     private DataNote dataNote;
 
@@ -60,16 +60,21 @@ public class NoteFragment extends Fragment {
     private void initList(LinearLayout view) {
         TextView name = view.findViewById(R.id.text_note_name);
         TextView description = view.findViewById(R.id.text_note_body);
-        description.setBackgroundColor(Color.parseColor("#FFFFFFFF"));
-
+        createBordersIfLandScape(name);
+        createBordersIfLandScape(description);
         name.setText(dataNote.getName());
         description.setText(dataNote.getDescription());
     }
 
-    public void onBackPressed() {
-        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-            FragmentManager fm = requireActivity().getSupportFragmentManager();
-            fm.popBackStack();
+    private void createBordersIfLandScape(TextView textView) {
+        SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(NameSharedPreference, Context.MODE_PRIVATE);
+        if (sharedPreferences.getBoolean(KEY_DARK_MODE, false)) {
+            GradientDrawable gradientDrawable=new GradientDrawable();
+            gradientDrawable.setStroke(4,requireActivity().getColor(R.color.white));
+            textView.setBackground(gradientDrawable);
+        } else {
+            textView.setBackgroundColor(requireActivity().getColor(R.color.white));
         }
     }
+
 }
