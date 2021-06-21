@@ -28,8 +28,6 @@ import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements Constants {
 
-    private boolean isLandscapeMode;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -37,9 +35,6 @@ public class MainActivity extends AppCompatActivity implements Constants {
         setContentView(R.layout.activity_main);
         Toolbar toolbar = initToolbar();
         initDrawer(toolbar);
-
-        isLandscapeMode = getResources().getConfiguration().
-                orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     public void setAppTheme() {
@@ -105,13 +100,8 @@ public class MainActivity extends AppCompatActivity implements Constants {
 
     public void addFragment(Fragment fragment) {
         FragmentManager fm = getSupportFragmentManager();
-        if(isLandscapeMode) {
-            fm.beginTransaction().replace(R.id.landscape_container, fragment)
-                    .addToBackStack(null).commit();
-        } else {
             fm.beginTransaction().replace(R.id.list_notes, fragment)
                     .addToBackStack(null).commit();
-        }
     }
 
     @Override

@@ -33,16 +33,8 @@ import java.util.Calendar;
 public class ListNotesFragment extends Fragment implements Constants {
 
     private DataNote dataNote;
-    private boolean isLandscapeMode;
 
     public ListNotesFragment() {
-    }
-
-    @Override
-    public void onAttach(@NonNull @NotNull Context context) {
-        super.onAttach(context);
-        isLandscapeMode = getResources().getConfiguration().
-                orientation == Configuration.ORIENTATION_LANDSCAPE;
     }
 
     @Override
@@ -53,9 +45,6 @@ public class ListNotesFragment extends Fragment implements Constants {
         } else {
             dataNote = new DataNote(getResources().getStringArray(R.array.notes)[0],
                     getResources().getStringArray(R.array.notes_description)[0]);
-        }
-        if (isLandscapeMode) {
-            showNote();
         }
     }
 
@@ -197,25 +186,10 @@ public class ListNotesFragment extends Fragment implements Constants {
 
     private void showNote() {
         NoteFragment noteWindow = NoteFragment.newInstance(dataNote);
-        if (isLandscapeMode) {
-            showLandscapeMode(noteWindow);
-        } else {
-            showPortraitMode(noteWindow);
-        }
-    }
-
-    private void showPortraitMode(NoteFragment noteWindow) {
         FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
         fragmentManager.beginTransaction().
                 replace(R.id.list_notes, noteWindow).
                 addToBackStack(null).
-                commit();
-    }
-
-    private void showLandscapeMode(NoteFragment noteWindow) {
-        FragmentManager fragmentManager = requireActivity().getSupportFragmentManager();
-        fragmentManager.beginTransaction().
-                replace(R.id.container_note_fragment, noteWindow).
                 commit();
     }
 }
