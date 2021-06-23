@@ -3,4 +3,6 @@
     <dimen name="nav_header_height">200dp</dimen>
     <dimen name="nav_header_dimen">25sp</dimen>
     <dimen name="margin_switch">20dp</dimen>
+    <dimen name="textTitle">20sp</dimen>
+    <dimen name="textDescription">15sp</dimen>
 </resources>

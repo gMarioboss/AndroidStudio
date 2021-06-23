@@ -2,23 +2,20 @@ package com.example.notes;
 
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.content.res.Configuration;
-import android.graphics.Color;
 import android.graphics.drawable.GradientDrawable;
 import android.os.Bundle;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
 
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import org.jetbrains.annotations.NotNull;
+import com.example.notes.Data.DataNote;
+import com.example.notes.Utils.Constants;
 
 public class NoteFragment extends Fragment implements Constants {
 
@@ -52,15 +49,15 @@ public class NoteFragment extends Fragment implements Constants {
     }
 
     private void initList(LinearLayout view) {
-        TextView name = view.findViewById(R.id.text_note_name);
-        TextView description = view.findViewById(R.id.text_note_body);
-        createBordersIfLandScape(name);
-        createBordersIfLandScape(description);
+        EditText name = view.findViewById(R.id.text_note_name);
+        EditText description = view.findViewById(R.id.text_note_body);
+        createBordersIfNightMode(name);
+        createBordersIfNightMode(description);
         name.setText(dataNote.getName());
         description.setText(dataNote.getDescription());
     }
 
-    private void createBordersIfLandScape(TextView textView) {
+    private void createBordersIfNightMode(TextView textView) {
         SharedPreferences sharedPreferences = requireActivity().getSharedPreferences(NameSharedPreference, Context.MODE_PRIVATE);
         if (sharedPreferences.getBoolean(KEY_DARK_MODE, false)) {
             GradientDrawable gradientDrawable=new GradientDrawable();
