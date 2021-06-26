@@ -10,4 +10,8 @@
     <string name="menu">Меню</string>
     <string name="night_mode">Night Mode</string>
     <string name="evgeniy">Evgeniy</string>
+    <string name="title">Заметка\u0020</string>
+    <string name="description">Описание\u0020</string>
+    <string name="change">Change</string>
+    <string name="delete">Delete</string>
 </resources>

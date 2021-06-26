@@ -3,6 +3,8 @@ package com.example.notes.UI;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.app.FragmentManager;
+import android.os.Build;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,8 +28,9 @@ public class ListNotesAdapter extends RecyclerView.Adapter<ListNotesAdapter.View
     private DataSource dataSource;
     private OnItemClickListener itemClickListener;
     private Fragment fragment;
+    private int menuPosition;
 
-    public ListNotesAdapter(DataSource dataSource, Fragment fragment){
+    public ListNotesAdapter(DataSource dataSource, Fragment fragment) {
         this.dataSource = dataSource;
         this.fragment = fragment;
     }
@@ -52,8 +55,12 @@ public class ListNotesAdapter extends RecyclerView.Adapter<ListNotesAdapter.View
         return dataSource.getSize();
     }
 
-    public void setOnItemClickListener(OnItemClickListener itemClickListener){
+    public void setOnItemClickListener(OnItemClickListener itemClickListener) {
         this.itemClickListener = itemClickListener;
+    }
+
+    public int getMenuPosition() {
+        return menuPosition;
     }
 
     public interface OnItemClickListener {
@@ -70,22 +77,41 @@ public class ListNotesAdapter extends RecyclerView.Adapter<ListNotesAdapter.View
 
             title = itemView.findViewById(R.id.title);
             dateTime = itemView.findViewById(R.id.date_time);
+            registerContextMenu(itemView);
 
             itemView.findViewById(R.id.container_list_item).setOnClickListener(v -> {
-                if (itemClickListener != null){
+                if (itemClickListener != null) {
                     itemClickListener.onItemClick(v, getAdapterPosition());
                 }
             });
+
+            itemView.findViewById(R.id.container_list_item).setOnLongClickListener(v -> {
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                    menuPosition = getLayoutPosition();
+                    itemView.showContextMenu(50, 50);
+                }
+                return true;
+            });
         }
 
-        public void setData(DataNote dataNote){
+        private void registerContextMenu(View itemView) {
+            if (fragment != null) {
+                itemView.setOnLongClickListener(v -> {
+                    menuPosition = getLayoutPosition();
+                    return false;
+                });
+                fragment.registerForContextMenu(itemView);
+            }
+        }
+
+        public void setData(DataNote dataNote) {
             title.setText(dataNote.getName());
             initDatePicker(dataNote);
             dateTime.setText(dataNote.getDateTime());
         }
 
         private void initDatePicker(DataNote dataNote) {
-            if(dataNote.getDateTime() == null) {
+            if (dataNote.getDateTime() == null) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.getInstance().get(Calendar.YEAR),
                         Calendar.getInstance().get(Calendar.MONTH),

@@ -18,10 +18,15 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import com.example.notes.Observer.Publisher;
+import com.example.notes.UI.SettingsFragment;
 import com.example.notes.Utils.Constants;
 import com.google.android.material.navigation.NavigationView;
 
 public class MainActivity extends AppCompatActivity implements Constants {
+
+    private Navigation navigation = new Navigation(getSupportFragmentManager());
+    private Publisher publisher = new Publisher();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,16 +92,10 @@ public class MainActivity extends AppCompatActivity implements Constants {
     private boolean navigateFragment(int id) {
         switch (id) {
             case R.id.action_settings:
-                addFragment(new SettingsFragment());
+                navigation.addFragment(new SettingsFragment(), true);
                 return true;
         }
         return false;
-    }
-
-    public void addFragment(Fragment fragment) {
-        FragmentManager fm = getSupportFragmentManager();
-            fm.beginTransaction().replace(R.id.list_notes, fragment)
-                    .addToBackStack(null).commit();
     }
 
     @Override
@@ -118,6 +117,14 @@ public class MainActivity extends AppCompatActivity implements Constants {
             }
         });
         return super.onCreateOptionsMenu(menu);
+    }
+
+    public Navigation getNavigation() {
+        return navigation;
+    }
+
+    public Publisher getPublisher() {
+        return publisher;
     }
 
 }

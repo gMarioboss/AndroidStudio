@@ -1,4 +1,4 @@
-package com.example.notes;
+package com.example.notes.UI;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 
+import com.example.notes.R;
 import com.example.notes.Utils.Constants;
 
 public class SettingsFragment extends Fragment implements Constants {

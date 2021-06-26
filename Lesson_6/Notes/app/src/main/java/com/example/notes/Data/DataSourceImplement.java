@@ -1,6 +1,7 @@
 package com.example.notes.Data;
 
 import android.content.res.Resources;
+import android.os.Parcelable;
 
 import com.example.notes.R;
 
@@ -34,5 +35,20 @@ public class DataSourceImplement implements DataSource {
     @Override
     public int getSize() {
         return dataList.size();
+    }
+
+    @Override
+    public void deleteCardData(int position) {
+        dataList.remove(position);
+    }
+
+    @Override
+    public void updateCardData(int position, DataNote dataNote) {
+        dataList.set(position, dataNote);
+    }
+
+    @Override
+    public void addCardData(DataNote dataNote) {
+        dataList.add(dataNote);
     }
 }
