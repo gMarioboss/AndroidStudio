@@ -6,4 +6,8 @@ public interface Constants {
     String NOTE_INFO = "Note Info";
     String DATA = "Data Info";
     int DEFAULT_DURATION = 500;
+    String NOTES_COLLECTION = "notes";
+    String TITLE = "title";
+    String DESCRIPTION = "description";
+    String DATE = "date";
 }

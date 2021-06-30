@@ -21,6 +21,8 @@ import com.example.notes.Observer.Publisher;
 import com.example.notes.R;
 import com.example.notes.Utils.Constants;
 
+import java.util.Calendar;
+
 public class NoteFragment extends Fragment implements Constants {
 
     private DataNote dataNote;
@@ -92,7 +94,23 @@ public class NoteFragment extends Fragment implements Constants {
 
         String description = this.title == null ? "" : this.description.getText().toString();
 
-        return new DataNote(name, description);
+        DataNote result;
+
+        if(dataNote != null) {
+            result = new DataNote(name, description, dataNote.getDateTime());
+            result.setId(dataNote.getId());
+        } else {
+            result = new DataNote(name, description, getDate());
+        }
+        return result;
+    }
+
+    private String getDate() {
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.getInstance().get(Calendar.YEAR),
+                Calendar.getInstance().get(Calendar.MONTH),
+                Calendar.getInstance().get(Calendar.DAY_OF_MONTH));
+        return android.text.format.DateFormat.format("yyyy-MM-dd", calendar).toString();
     }
 
     private void initList(LinearLayout view) {

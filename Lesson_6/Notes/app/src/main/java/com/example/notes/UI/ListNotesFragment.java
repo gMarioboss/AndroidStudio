@@ -27,7 +27,8 @@ import android.widget.Toast;
 
 import com.example.notes.Data.DataNote;
 import com.example.notes.Data.DataSource;
-import com.example.notes.Data.DataSourceImplement;
+import com.example.notes.Data.DataSourceFirebaseImpl;
+import com.example.notes.Data.DataSourceResponse;
 import com.example.notes.MainActivity;
 import com.example.notes.Navigation;
 import com.example.notes.Observer.Observer;
@@ -44,15 +45,12 @@ public class ListNotesFragment extends Fragment implements Constants {
     private RecyclerView recyclerView;
     private Navigation navigation;
     private Publisher publisher;
+    private int onClickPosition;
+    private boolean isClicked;
+
 
     public static ListNotesFragment newInstance() {
         return new ListNotesFragment();
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        data = new DataSourceImplement(getResources()).init();
     }
 
     @Override
@@ -61,6 +59,13 @@ public class ListNotesFragment extends Fragment implements Constants {
         View view = inflater.inflate(R.layout.fragment_list_notes, container, false);
         initRecyclerView(view, data);
         initPopupMenu(view);
+        data = new DataSourceFirebaseImpl().init(new DataSourceResponse() {
+            @Override
+            public void initialized(DataSource noteList) {
+                adapter.notifyDataSetChanged();
+            }
+        });
+        adapter.setDataSource(data);
         return view;
     }
 
@@ -90,18 +95,7 @@ public class ListNotesFragment extends Fragment implements Constants {
                 popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                     @Override
                     public boolean onMenuItemClick(MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.popup_add:
-                                navigation.addFragment(NoteFragment.newInstance(), true);
-                                publisher.subscribe(new Observer() {
-                                    @Override
-                                    public void updateCardData(DataNote dataNote) {
-                                        data.addCardData(dataNote);
-                                        adapter.notifyItemInserted(data.getSize() - 1);
-                                        recyclerView.scrollToPosition(data.getSize() - 1);
-                                    }
-                                });
-                        }
+                        onItemSelected(R.id.popup_add);
                         return true;
                     }
                 });
@@ -119,24 +113,46 @@ public class ListNotesFragment extends Fragment implements Constants {
 
     @Override
     public boolean onContextItemSelected(@NonNull @NotNull MenuItem item) {
-        int position = adapter.getMenuPosition();
-        switch(item.getItemId()) {
-            case R.id.action_change:
-                navigation.addFragment(NoteFragment.newInstance(data.getDataNote(position)), true);
+        return onItemSelected(item.getItemId()) || super.onContextItemSelected(item);
+    }
+
+    private boolean onItemSelected(int menuItem) {
+        switch (menuItem) {
+            case R.id.popup_add:
+                navigation.addFragment(NoteFragment.newInstance(), true);
                 publisher.subscribe(new Observer() {
                     @Override
                     public void updateCardData(DataNote dataNote) {
-                        data.updateCardData(position, dataNote);
-                        adapter.notifyItemChanged(position);
+                        data.addCardData(dataNote);
+                        adapter.notifyItemInserted(0);
+                        recyclerView.scrollToPosition(0);
+                    }
+                });
+                return true;
+            case R.id.action_change:
+                int updatePosition;
+                if(isClicked) {
+                    updatePosition = onClickPosition;
+                    isClicked = false;
+                } else {
+                    updatePosition = adapter.getMenuPosition();
+                }
+                navigation.addFragment(NoteFragment.newInstance(data.getDataNote(updatePosition)), true);
+                publisher.subscribe(new Observer() {
+                    @Override
+                    public void updateCardData(DataNote dataNote) {
+                        data.updateCardData(updatePosition, dataNote);
+                        adapter.notifyItemChanged(updatePosition);
                     }
                 });
                 return true;
             case R.id.action_delete:
-                data.deleteCardData(position);
-                adapter.notifyItemRemoved(position);
+                int deletePosition = adapter.getMenuPosition();
+                data.deleteCardData(deletePosition);
+                adapter.notifyItemRemoved(deletePosition);
                 return true;
         }
-        return super.onContextItemSelected(item);
+        return false;
     }
 
     private void initRecyclerView(View view, DataSource data) {
@@ -145,18 +161,13 @@ public class ListNotesFragment extends Fragment implements Constants {
         setItemSeparator(recyclerView);
         setItemAnimation(data, recyclerView);
 
-        adapter = new ListNotesAdapter(data, this);
+        adapter = new ListNotesAdapter(this);
         recyclerView.setAdapter(adapter);
 
         adapter.setOnItemClickListener((itemView, position) -> {
-            navigation.addFragment(NoteFragment.newInstance(data.getDataNote(position)), true);
-            publisher.subscribe(new Observer() {
-                @Override
-                public void updateCardData(DataNote dataNote) {
-                    data.updateCardData(position, dataNote);
-                    adapter.notifyItemChanged(position);
-                }
-            });
+            isClicked = true;
+            onClickPosition = position;
+            onItemSelected(R.id.action_change);
         });
     }
 

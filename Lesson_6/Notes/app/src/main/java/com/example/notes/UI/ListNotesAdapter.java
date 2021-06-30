@@ -30,8 +30,7 @@ public class ListNotesAdapter extends RecyclerView.Adapter<ListNotesAdapter.View
     private Fragment fragment;
     private int menuPosition;
 
-    public ListNotesAdapter(DataSource dataSource, Fragment fragment) {
-        this.dataSource = dataSource;
+    public ListNotesAdapter(Fragment fragment) {
         this.fragment = fragment;
     }
 
@@ -61,6 +60,11 @@ public class ListNotesAdapter extends RecyclerView.Adapter<ListNotesAdapter.View
 
     public int getMenuPosition() {
         return menuPosition;
+    }
+
+    public void setDataSource(DataSource dataSource) {
+        this.dataSource = dataSource;
+        notifyDataSetChanged();
     }
 
     public interface OnItemClickListener {
@@ -107,7 +111,6 @@ public class ListNotesAdapter extends RecyclerView.Adapter<ListNotesAdapter.View
         public void setData(DataNote dataNote) {
             title.setText(dataNote.getName());
             initDatePicker(dataNote);
-            dateTime.setText(dataNote.getDateTime());
         }
 
         private void initDatePicker(DataNote dataNote) {
@@ -132,6 +135,7 @@ public class ListNotesAdapter extends RecyclerView.Adapter<ListNotesAdapter.View
                 });
                 datePickerDialogFragment.show(fragment.getActivity().getSupportFragmentManager(), "");
             });
+            dateTime.setText(dataNote.getDateTime());
         }
     }
 }
