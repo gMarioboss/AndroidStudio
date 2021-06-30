@@ -1,14 +1,25 @@
-package com.example.notes;
+package com.example.notes.Data;
 
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import java.util.Calendar;
+
 public class DataNote implements Parcelable {
+
+    private String description;
+    private String dateTime;
+    private String name;
 
     protected DataNote(Parcel in) {
         name = in.readString();
         description = in.readString();
         dateTime = in.readString();
+    }
+
+    public DataNote (String name, String description) {
+        this.name = name;
+        this.description = description;
     }
 
     @Override
@@ -39,11 +50,6 @@ public class DataNote implements Parcelable {
         return name;
     }
 
-    public DataNote (String name, String description) {
-        this.name = name;
-        this.description = description;
-    }
-
     public void setName(String name) {
         this.name = name;
     }
@@ -55,9 +61,6 @@ public class DataNote implements Parcelable {
     public void setDescription(String description) {
         this.description = description;
     }
-    private String name;
-
-    private String description;
 
     public String getDateTime() {
         return dateTime;
@@ -67,6 +70,6 @@ public class DataNote implements Parcelable {
         this.dateTime = dateTime;
     }
 
-    private String dateTime;
+
 
 }
