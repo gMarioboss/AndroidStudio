@@ -23,4 +23,7 @@
     <style name="Theme.Notes.AppBarOverlay" parent="ThemeOverlay.MaterialComponents.Dark.ActionBar"/>
 
     <style name="Theme.Notes.PopupOverlay" parent="ThemeOverlay.MaterialComponents.Light"/>
+
+
+
 </resources>

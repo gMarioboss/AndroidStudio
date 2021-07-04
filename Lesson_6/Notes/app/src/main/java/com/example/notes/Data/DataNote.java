@@ -7,6 +7,7 @@ import java.util.Calendar;
 
 public class DataNote implements Parcelable {
 
+    private String id;
     private String description;
     private String dateTime;
     private String name;
@@ -20,6 +21,12 @@ public class DataNote implements Parcelable {
     public DataNote (String name, String description) {
         this.name = name;
         this.description = description;
+    }
+
+    public DataNote (String name, String description, String dateTime) {
+        this.name = name;
+        this.description = description;
+        this.dateTime = dateTime;
     }
 
     @Override
@@ -71,5 +78,11 @@ public class DataNote implements Parcelable {
     }
 
 
+    public String getId() {
+        return id;
+    }
 
+    public void setId(String id) {
+        this.id = id;
+    }
 }

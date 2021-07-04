@@ -1,6 +1,7 @@
 package com.example.notes.Data;
 
 public interface DataSource {
+    DataSource init(DataSourceResponse dataSourceResponse);
     DataNote getDataNote(int position);
     int getSize();
     void deleteCardData(int position);
