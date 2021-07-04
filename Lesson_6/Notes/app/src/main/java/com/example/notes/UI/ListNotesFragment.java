@@ -116,7 +116,7 @@ public class ListNotesFragment extends Fragment implements Constants {
         return onItemSelected(item.getItemId()) || super.onContextItemSelected(item);
     }
 
-    private boolean onItemSelected(int menuItem) {
+    public boolean onItemSelected(int menuItem) {
         switch (menuItem) {
             case R.id.popup_add:
                 navigation.addFragment(NoteFragment.newInstance(), true);
@@ -148,11 +148,18 @@ public class ListNotesFragment extends Fragment implements Constants {
                 return true;
             case R.id.action_delete:
                 int deletePosition = adapter.getMenuPosition();
-                data.deleteCardData(deletePosition);
-                adapter.notifyItemRemoved(deletePosition);
+                DialogDeleteFragment ddf = new DialogDeleteFragment(deletePosition);
+                ddf.show(requireActivity().getSupportFragmentManager(), "delete_tag");
                 return true;
         }
         return false;
+    }
+
+    public DataSource getData() {
+        return data;
+    }
+    public ListNotesAdapter getAdapter() {
+        return adapter;
     }
 
     private void initRecyclerView(View view, DataSource data) {

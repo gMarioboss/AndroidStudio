@@ -14,4 +14,8 @@
     <string name="description">Описание\u0020</string>
     <string name="change">Change</string>
     <string name="delete">Delete</string>
+    <string name="warning">Предупреждение!</string>
+    <string name="warning_to_delete">Вы уверены, что хотите удалить эту заметку?</string>
+    <string name="yes">Да, удалить</string>
+    <string name="no">Нет</string>
 </resources>
